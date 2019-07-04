@@ -38,8 +38,10 @@ class Editor extends React.Component {
         return (
             <div>
                 <Header />
+                <div className="grid">
                 <EventList events={events} />
                 <PropsRoute path="/events/:id" component={Event} event={event} />
+                </div>
             </div>
         );
     }
