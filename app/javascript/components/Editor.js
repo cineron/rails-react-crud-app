@@ -1,11 +1,16 @@
 import React from "react";
 import axios from "axios";
+
+import PropTypes from "prop-types";
+
 import Header from "./Header";
 import EventList from "./Eventlist";
 
-import PropTypes from "prop-types";
 import PropsRoute from "./PropsRoute";
 import Event from "./Event";
+
+import { Switch } from "react-router-dom";
+import EventForm from "./EventForm";
 
 class Editor extends React.Component {
     constructor(props) {
@@ -20,7 +25,7 @@ class Editor extends React.Component {
         axios
             .get("/api/events.json")
             .then(response => this.setState({
-                events: response.data
+                events: response.data,
             }))
             .catch((error) => {
                 console.log(error);
@@ -33,14 +38,17 @@ class Editor extends React.Component {
 
         const { match } = this.props;
         const eventId = match.params.id;
-        const event = events.find(e => e.id == Number(eventId));
+        const event = events.find(e => e.id === Number(eventId));
 
         return (
             <div>
                 <Header />
                 <div className="grid">
-                <EventList events={events} activeId={Number(eventId)}/>
-                <PropsRoute path="/events/:id" component={Event} event={event} />
+                <EventList events={events} activeId={Number(eventId)} />
+                <Switch>
+                    <PropsRoute path="/events/new" component={EventForm} />
+                    <PropsRoute path="/events/:id" component={Event} event={event} />
+                </Switch>
                 </div>
             </div>
         );
